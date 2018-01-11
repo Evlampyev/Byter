@@ -1,0 +1,363 @@
+unit ServerForm;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, IdBaseComponent, IdComponent,
+  IdCustomTCPServer, IdTCPServer, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids,
+  IdContext, Vcl.ExtCtrls, WinProcs;
+
+type
+  TForm1 = class(TForm)
+    IdTCPServer1: TIdTCPServer;
+    ResultTable: TStringGrid;
+    Выход: TBitBtn;
+    Panel1: TPanel;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Port: TLabel;
+    IPAdress: TLabel;
+    Применить: TButton;
+    Memo1: TMemo;
+    Edit3: TEdit;
+    Label1: TLabel;
+    ChampionPanel: TPanel;
+    Panel3: TPanel;
+    ChampionGrid: TStringGrid;
+    ResetBitBtn: TBitBtn;
+    ButLevel1: TButton;
+    ButLev2: TButton;
+    ButLev3: TButton;
+    ButLev4: TButton;
+
+    procedure ВыходClick(Sender: TObject);
+    procedure IdTCPServer1Execute(AContext: TIdContext);
+    procedure ПрименитьClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ResultTableDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
+    procedure ResetBitBtnClick(Sender: TObject);
+    procedure ButLevel1Click(Sender: TObject);
+  private
+    { Private declarations }
+    Procedure OutputPerson;
+    Procedure SortPerson;
+    Procedure ChangePerson (i,z:byte);
+
+  public
+    { Public declarations }
+    Procedure ClearStrigGrid;
+    Procedure ChampionSave;
+    Procedure ChampionReadData(Sender:TObject);
+    Procedure ChampionChange;
+
+  end;
+Const
+  V = 50; // максимальное количесвто участников
+Type
+   MyRecord = Record
+      MyName  : String [15];
+      MyClass : String [15];
+      MyLevel : Byte;
+      MyTime  : String [7];
+      MyAnswer: Byte;
+  End;
+var
+  Form1: TForm1;
+  Person: Array [1..V] of MyRecord;
+  ChampionPerson: array [1..4, 1..5] of MyRecord;
+  Contestant, NumberOfCadet: Byte;
+
+implementation
+
+{$R *.dfm}
+
+Procedure TForm1.ClearStrigGrid;
+Var i,j:Byte;
+Begin
+      For i := 1 to NumberOfCadet do
+        For j := 0 to 6 do
+            Form1.ResultTable.Cells [j,i] := '';
+End;
+
+Procedure TForm1.ChampionReadData(Sender:TObject);
+Var
+ FChampion: File of MyRecord;
+ NewLevel,i: byte;
+ RecordChampion: MyRecord;
+Begin
+  For NewLevel := 1 to 4 do
+    Begin
+       AssignFile(FChampion, 'Champion'+IntToStr(NewLevel)+'.txt');
+       if FileExists ('Champion'+IntToStr(NewLevel)+'.txt')  Then
+         begin
+          Reset (FChampion);
+          i:=1;
+          while (not EOF(FChampion)) do
+            Begin
+              Read(FChampion, RecordChampion);
+              ChampionPerson[NewLevel,i] := RecordChampion;
+              i:=i+1;
+            End;
+         CloseFile(FChampion);
+         End;
+    End;
+End;
+
+procedure TForm1.FormCreate(Sender: TObject);
+var
+  i,j: Integer;
+begin
+  With ResultTable do
+    Begin
+      ColCount := 6;
+      RowCount := 11;
+      FixedRows := 1;
+      FixedCols := 0;
+      ColWidths [0] := 60;
+      ColWidths [1] := 160; // ФИО
+      ColWidths [2] := 55;  // Класс
+      ColWidths [3] := 75;  // Уровень
+      ColWidths [4] := 60;  // Время
+      ColWidths [5] := 55;  // Верно
+    Rows[0].CommaText := '"№ п/п","Фамилия и имя",Класс,Уровень,Время,Верно';
+    End;
+   Contestant := 1;
+   ChampionReadData(Sender);
+end;
+
+Procedure TForm1.ChampionSave;       //Заполнение таблицы рекордов
+Var
+ FChampion: File of MyRecord;
+ NewLevel,i: byte;
+Begin
+  For NewLevel := 1 to 4 do
+    Begin
+       AssignFile(FChampion, 'Champion'+IntToStr(NewLevel)+'.txt');
+       Rewrite(FChampion);
+       for i := 1 to 5 do
+         Write (FChampion, ChampionPerson[NewLevel,i]);
+       CloseFile(FChampion);
+    End;
+  End;
+
+
+procedure TForm1.ButLevel1Click(Sender: TObject);
+  Var
+    i:byte;
+Begin
+For i:=1 to 5 do
+  Begin
+       With
+  End;
+
+end;
+
+Procedure TForm1.ChampionChange;
+Var
+  i:byte;
+  ChangeYes:Boolean;
+  Level,t:Byte;
+Begin
+  i:=5;
+  Level:=Person[1].MyLevel;
+  repeat
+  if Person[1].MyAnswer > ChampionPerson[Level,i].MyAnswer then
+    Begin
+      ChangeYes:=True;
+      If i < 5 Then
+        for t := 5 to i+1 do
+          ChampionPerson[Level,t] := ChampionPerson[Level,t-1];
+      ChampionPerson[Level,i] := Person[1];
+    End Else
+  if (Person[1].MyAnswer = ChampionPerson[Level,i].MyAnswer) and (Person[1].MyTime < ChampionPerson[Level,i].MyTime)  then
+    Begin
+      ChangeYes:=True;
+      If i < 5 Then
+        for t := 5 to i+1 do
+          ChampionPerson[Level,t] := ChampionPerson[Level,t-1];
+      ChampionPerson[Level,i] := Person[1];
+    End Else i:=i-1;
+  until (i=0) or ChangeYes;
+End;
+
+Procedure TForm1.OutputPerson;    // процедура вывода записей на экран
+Var
+  i:byte;
+Begin
+ For i := 1 to Contestant-1 do
+  Begin
+    With Form1.ResultTable do
+      Begin
+          Cells[0,i] := IntToStr(i);
+          Cells[1,i] := Person [i].MyName;
+          Cells[2,i] := Person [i].MyClass;
+          Cells[3,i] := IntToStr(Person [i].MyLevel);
+          Cells[4,i] := Person [i].MyTime;
+          Cells[5,i] := IntToStr(Person [i].MyAnswer);
+      End;
+    End;
+End;
+
+Procedure TForm1.ChangePerson (i,z:byte);
+Var
+  s:String;
+  j:Byte;
+Begin
+      s := Person[i].MyName;
+      Person[i].MyName := Person[z].MyName;
+      Person[z].MyName := s;
+      s:= Person[i].MyClass;
+      Person[i].MyClass := Person[z].MyClass;
+      Person[z].MyClass := s;
+      j := Person[i].MyLevel;
+      Person[i].MyLevel := Person[z].MyLevel;
+      Person[z].MyLevel := j;
+      s := Person[i].MyTime;
+      Person[i].MyTime := Person[z].MyTime;
+      Person[z].MyTime := s;
+      j := Person[i].MyAnswer;
+      Person[i].MyAnswer := Person[z].MyAnswer;
+      Person[z].MyAnswer := j;
+End;
+
+Procedure TForm1.SortPerson; // Сортировка записей
+Var
+  i,j,z: Byte;
+  s: String;
+Begin
+ For i := (Contestant-1) downto 2 do
+  Begin
+   if Person[i].MyAnswer > Person[i-1].MyAnswer then
+    Begin
+      z:=i-1;
+      ChangePerson (i,z);
+      OutPutPerson;
+    End;
+    if (Person[i].MyAnswer = Person[i-1].MyAnswer) and (Person[i].MyTime < Person[i-1].MyTime) then
+      Begin
+        z:=i-1;
+        ChangePerson (i,z);
+        OutPutPerson;
+      End;
+   End;
+  ChampionChange;
+End;
+
+procedure TForm1.ResetBitBtnClick(Sender: TObject);
+Var
+  i:Byte;
+begin
+ ClearStrigGrid;
+ for i := 1 to V do
+    with Person[i] do
+      Begin
+        MyName:='';
+        MyClass:='';
+        MyLevel:=0;
+        MyTime := '';
+        MyAnswer:=0;
+      End;
+  Contestant := 1;
+end;
+
+procedure TForm1.ResultTableDrawCell(Sender: TObject; ACol, ARow: Integer;  Rect: TRect; State: TGridDrawState);
+Var
+  Format: Word;
+  C: array[0..255] of Char;
+begin
+ResultTable.Canvas.Font.Size:=12;
+  if ACol = 0 then Format := DT_CENTER // первый столбец - положение текста по центру
+              else if ACol = 1 then Format := DT_LEFT // второй столбец – положение текста по левому краю
+                               else Format := DT_RIGHT;// остальные – положение текста по правому краю
+  if ARow = 0 then Format := DT_CENTER;// первая строка – положение текста по центру
+  ResultTable.Canvas.FillRect(Rect); // перерисовка ячейки
+  StrPCopy(C, ResultTable.Cells[ACol, ARow]); // преобразование строки в формат PChar
+  WinProcs.DrawText(ResultTable.Canvas.Handle, C, StrLen(C), Rect, Format); // вывод текста
+end;
+
+procedure TForm1.IdTCPServer1Execute(AContext: TIdContext);
+Var
+  L, F, W: String;
+  Position,i, Next, Posit, Place: Byte;
+begin
+  l := AContext.Connection.IOHandler.ReadLn();
+  Memo1.Lines.Add(l);
+   f:=l;
+   for I := 1 to 2 do
+   Begin
+     Position:=Pos (' ',f);
+     W := W+Copy (f,1,Position);
+     Delete (f,1,Position);
+   End;
+   Delete (W,Length(W),1);
+   Next := 1;
+   Place:=0;
+   i:=1;
+   While i < Contestant do
+     if (Person[i].MyName = W) then
+      begin
+        Place := i;
+        i := Contestant;
+      end Else
+        If (Person[i].MyName = '') Then i := Contestant Else i:=i+1;
+   if Place = 0 then
+Begin
+   Position:=Pos (' ',l);
+   While Next < 6 do
+    Begin
+     case next of
+      1: Begin
+          Person[Contestant].MyName := Copy (l,1,Position-1);
+          Delete (l,1,Position);
+          Position:=Pos (' ',l);
+          Person[Contestant].MyName := Person[Contestant].MyName + ' ' + Copy (l,1,Position-1);
+         End;
+      2: Begin
+          Position := Position +2;
+          Person[Contestant].MyClass := Copy (l,1,Position-1);
+         End;
+      3: Person[Contestant].MyLevel := StrToInt(Copy (l,1,Position-1));
+      4: Person[Contestant].MyTime := Copy (l,1,Position-1);
+     end;
+     Delete (l,1,Position);
+     Inc(Next);
+     Position := Pos(' ',l);
+    End;
+  Person[Contestant].MyAnswer := StrToInt(l);
+  Inc(Contestant);
+End Else
+  Begin
+     For I := 1 to 2 do
+      Begin
+        Position:=Pos (' ',F);
+        Delete (F,1,Position);
+      End;
+       Position := Pos(' ',F);
+       Person[Place].MyLevel := StrToInt(Copy (F,1,Position-1));
+       Delete (F,1,Position);
+       Position := Pos(' ',F);
+       Person[Place].MyTime := Copy (F,1,Position-1);
+       Delete (F,1,Position);
+       Person[Place].MyAnswer := StrToInt(F);
+  End;
+  SortPerson;
+  OutputPerson;
+end;
+
+procedure TForm1.ВыходClick(Sender: TObject);
+begin
+  ChampionSave;
+  close;
+end;
+
+procedure TForm1.ПрименитьClick(Sender: TObject);
+begin
+   IdTCPServer1.DefaultPort := StrToInt(Edit1.Text);
+   Panel1.Visible := False;
+   ResultTable.Height := ResultTable.Height+100;
+   NumberOfCadet := StrToInt (Edit3.Text);
+end;
+
+end.

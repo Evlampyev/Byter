@@ -1,0 +1,14 @@
+program Project1;
+
+uses
+  Vcl.Forms,
+  Разминка in 'Разминка.pas' {Razm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TRazm, Razm);
+  Application.Run;
+end.
