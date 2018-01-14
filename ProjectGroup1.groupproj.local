@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.719,C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\ProjectGroup1.groupproj=C:\Байтер\2017.12.23-4\ProjectGroup1.groupproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.719,C:\Байтер\2017.12.23-4\ProjectGroup1.groupproj=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\ProjectGroup1.groupproj</Transaction>
   </Transactions>
 	<Default.Personality>
-		<Projects ActiveProject="D:\Байтер\2018.01.10\Разминка\Project1.dproj"/>
+		<Projects ActiveProject="C:\GitHub\Byter\Разминка\Project1.dproj"/>
 	</Default.Personality>
 </BorlandProject>

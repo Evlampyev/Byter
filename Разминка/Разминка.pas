@@ -76,6 +76,7 @@ type
     Image8: TImage;
     Image9: TImage;
     Image10: TImage;
+    Panel18: TPanel;
 
     procedure ÂûõîäClick(Sender: TObject);
     procedure Panel2MouseDown(Sender: TObject; Button: TMouseButton;
