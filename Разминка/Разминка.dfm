@@ -25616,6 +25616,15 @@
       ExplicitHeight = 81
     end
   end
+  object Memo1: TMemo
+    Left = 18
+    Top = 116
+    Width = 193
+    Height = 215
+    Lines.Strings = (
+      'Memo1')
+    TabOrder = 26
+  end
   object MainMenu1: TMainMenu
     Left = 368
     Top = 664
