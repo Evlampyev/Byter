@@ -45,7 +45,7 @@ begin
     Incorrect := False;
     Sln := LastNameEdit.Text;
     Len := Length (Sln);
-    for i := 1 to Len do
+{}    for i := 1 to Len do
         if ((Ord (Sln[i]) < 1040) or (Ord (Sln[i]) > 1103)) then Incorrect := True; //проверка на русский язык
     Sln := NameEdit.Text;
     Len := Length (Sln);
@@ -62,10 +62,14 @@ begin
       School := Klass.Items [Klass.ItemIndex]+ ' ' + KlassLetter.Items [Klass.ItemIndex];
       LastName := LastNameEdit.Text;
       Razm.RegLabel.Caption :=   LastName+ ' ' + NameI + ' ' + School;
-      SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';
+      SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';  {}
 // убрать следующие две строки после включения регистрации
 {Razm.RegLabel.Caption := 'Евлампьев Александр 11 Я';
-SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';        }
+SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';}
+
+      if (Klass.Items [Klass.ItemIndex]='7') or (Klass.Items [Klass.ItemIndex]='8') then ClassLevel := 2;
+      if (Klass.Items [Klass.ItemIndex]='9') or (Klass.Items [Klass.ItemIndex]='10') or (Klass.Items [Klass.ItemIndex]='11')  then ClassLevel := 3;
+
 
       Razm.RegLabel.Visible := True;
 
@@ -82,7 +86,8 @@ SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + 
       except
         Razm.ConnectLabel.Caption := 'Нет связи';
       end;
-
+        Razm.N2.Enabled := True;
+        Razm.Sopos.Enabled := True;
       Close;
     End;
 

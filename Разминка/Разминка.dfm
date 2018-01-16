@@ -25616,18 +25616,13 @@
       ExplicitHeight = 81
     end
   end
-  object Panel18: TPanel
-    Left = 352
-    Top = 496
-    Width = 369
-    Height = 113
-    Caption = #1055#1088#1086#1074#1077#1088#1082#1072' '#1080#1079' '#1076#1086#1084#1072
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clYellow
-    Font.Height = -37
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold, fsItalic]
-    ParentFont = False
+  object Memo1: TMemo
+    Left = 18
+    Top = 116
+    Width = 193
+    Height = 215
+    Lines.Strings = (
+      'Memo1')
     TabOrder = 26
   end
   object MainMenu1: TMainMenu

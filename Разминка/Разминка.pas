@@ -76,7 +76,7 @@ type
     Image8: TImage;
     Image9: TImage;
     Image10: TImage;
-    Panel18: TPanel;
+    Memo1: TMemo;
 
     procedure ВыходClick(Sender: TObject);
     procedure Panel2MouseDown(Sender: TObject; Button: TMouseButton;
@@ -108,13 +108,20 @@ type
 
     procedure SendButtonClick;
   end;
-
+Type
+   MyRndmNmbr = Record
+      MyNumber : Word; {число}
+      MySize : Byte;   {степерь двойки}
+      MyMeasure : Byte;  {единица измерения}
+      MyColor  : TColor; {цвет}
+      End;
 var
   Razm: TRazm;
   PanelL: Array [1..5, 1..2] of Tpanel;
   PanelA: Array [1..5, 1..2] of Tpanel;
   ImageL: Array [1..5, 1..2] of TImage;
-  Level, LevelTime: Byte;
+  NumberOnImage: Array [1..5, 1..2] of MyRndmNmbr;
+  Level, LevelTime, ClassLevel: Byte;
   TimeNow, TimeOne : TTime;
   LastName, NameI, School: String;
   SendText:String;
@@ -187,10 +194,10 @@ begin
       End;
 end;
 
-Function Stepen (k: Byte): Word;  // возвращает степень двойки
+Function Stepen (k: Byte): Longint;  // возвращает степень двойки
     Var
       i:Byte;
-      Step: Word;
+      Step: Longint;
     Begin
       Step := 1;
       for i := 1 to k do
@@ -259,7 +266,6 @@ end;
 procedure TRazm.FormCreate(Sender: TObject);
  Var
     i, k, l: Byte;
-    Expr1: TExprClass;
 begin
   for i := 0 to ComponentCount-1 do   // Заполнение массивов имеющимися элементами с формы
     Begin
@@ -272,6 +278,12 @@ begin
              IF Components[i].ClassType=TImage Then ImageL [Components[i].Tag div 10, Components[i].Tag mod 10] := (Components[i] as TImage);
             End;
     End;
+for i := 1 to 5 do
+  for k := 1 to 2 do
+    Begin
+     PanelA[i,k].Top := 23+117*(i-1);
+     PanelA[i,k].Left := 830 + 300*(k-1);
+  End;
 
     Gif := TGifImage.Create;
     Gif.LoadFromFile('Pictures\Gif\Blink.gif');
@@ -282,13 +294,12 @@ begin
     Ravno3.Picture.Assign(Gif);
     Ravno4.Picture.Assign(Gif);
     Ravno5.Picture.Assign(Gif);
-
-    ExitGif := TGifImage.Create;
-    ExitGif.LoadFromFile('Pictures\Gif\ExitLive.gif');
-    ExitGif.Animate := True;
-    ExitImage.Picture.Assign(ExitGif);
-
-  Level := 1;
+      ExitGif := TGifImage.Create;
+      ExitGif.LoadFromFile('Pictures\Gif\ExitLive.gif');
+      ExitGif.Animate := True;
+      ExitImage.Picture.Assign(ExitGif);
+  Level := 1;     // уровень сложности
+  ClassLevel:=1;  // уровень диапазона чисел в задании в зависимости от класс, без регистрации по умолчанию 1
   ImageLevel.Picture.LoadFromFile('Pictures\Level\Low.png');
   Panel10.Caption := 'ЛЁГКИЙ УРОВЕНЬ';
   try
@@ -299,6 +310,9 @@ begin
     ConnectLabel.Caption := 'Нет связи';
   end;
 
+  N21.Enabled := False; //не активные пустые пункты меню выбор режима
+  N31.Enabled := False;
+  N11.Enabled := False;
 end;
 
 procedure TRazm.Panel2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);// Перемещение объектов по форме
@@ -312,13 +326,11 @@ procedure TRazm.Panel2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TS
 procedure TRazm.Panel5MouseLeave(Sender: TObject); // Расставляет аккуратно все панельки на места
 var
   aRect : TRect;
-  I: Integer;
-  Lx,Ly, Ax,Ay, Px, Py,Xx, Yy : Byte;
+  Lx,Ly, Ax,Ay, Px, Py, Xx, Yy : Byte;
 begin
   Lx := 1;
   Ly := 1;
-  Ax := 1;
-  Ay := 1;
+
   if Sender.ClassType = TPanel then
     While Sender <> PanelL[Lx,Ly] do
       Begin
@@ -366,6 +378,7 @@ begin
 
 procedure TRazm.RegistrationClick(Sender: TObject);
 Begin
+  ClearFormRazm;
   FormRegistration.Visible := True;
   FormRegistration.SetFocus;
   StopWatch.Visible := False;
@@ -374,15 +387,47 @@ End;
 
 procedure TRazm.ResultButtonClick(Sender: TObject); // Проверяет правильность выполнения задания
 Var
-  i, mark : Byte;
+  i, mark,z,q,w,Isk : Byte;
+  TopFirst, Shag: Word;
+  ResultKoef: Array [1..4] of Longint;
+  k: Integer;
 begin
  TimeOne := Time-TimeNow;
  Timer1.Enabled := False;
  Mark := 0;
- for i := 1 to 5 do
+ N2.Enabled := True;
+ Sopos.Enabled := True;
+ResultKoef [1] := 1;
+ResultKoef [2] := 8;
+ResultKoef [3] := 8192;
+ResultKoef [4] := 8388608;
+for i := 1 to 5 do
+  for k := 1 to 2 do 
+    Memo1.Lines.Add(IntToStr(i)+IntToStr(k)+' - ' + IntToStr(PanelL[i,k].Top));
+ {for i := 1 to 5 do
     Begin
       if PanelL[i,1].Top = PanelL[i,2].Top then Mark := Mark +1;
+    End;}
+TopFirst := PanelL[1,1].Top+6; Shag := 117;
+q:=1; w:=1;
+While (q < 6) and (w < 3) do
+Begin
+for i := q to 5 do
+  for k := 1 to 2 do
+    Begin
+        if (PanelL[q,w].Top = PanelL[i,k].Top) and ((q<>i) or (w<>k)) and (PanelL[i,k].Visible=True) then
+          Begin
+           PanelL[i,k].Visible := False;
+           PanelL [q,w].Visible := False;
+           If NumberOnImage[q,w].MyNumber = 0 Then Inc(NumberOnImage[q,w].MyNumber);
+           If NumberOnImage[i,k].MyNumber = 0 Then Inc(NumberOnImage[i,k].MyNumber);
+           If NumberOnImage[q,w].MyNumber*Stepen(NumberOnImage[q,w].MySize)*ResultKoef[NumberOnImage[q,w].MyMeasure] = NumberOnImage[i,k].MyNumber*Stepen(NumberOnImage[i,k].MySize)*ResultKoef[NumberOnImage[i,k].MyMeasure] Then Inc(Mark);
+           Break;
+          End;
     End;
+w:=w+1;
+If w=3 then Begin Inc(q); w := 1; end;
+End;
  ShowMessage ('Верно - ' + IntToStr (Mark));
  SendText := RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + StopWatch.Caption + ' ' + IntToStr (Mark);
  SendButtonClick;
@@ -397,254 +442,202 @@ end;
 
 procedure TRazm.SoposClick(Sender: TObject);
 Var
-  k, l, i, x: Byte;
-  Top1, Top2, Left1, Left2: Word;
-  kl: array [1..5,1..2] of String;
-  kli: array [1..5,1..2] of Word;
-  ColorFont : array [1..5] of TColor;
+  k, l, i, FontSize: Byte;
+  Measure: array [1..5] of String[7];
+  ColorFont : array [0..4] of TColor;
   Yes : Boolean;
-  kStr:String[7];
   Expr: TExprClass;
-   bitmap1: TBitMap;
-   Bit:String[5];
+  Bit: String[7];
 
-
-  begin
+begin
+N2.Enabled := False;
+Sopos.Enabled := False;
 for i :=1 to 5 do
   for k := 1 to 2 do
           ImageL[i, k].Picture := nil;
+FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
 
-    ColorFont [1] := 0;
+    ColorFont [0] := 0;
+    ColorFont [1] := RGB(0,0,255);
     ColorFont [2] := 255;
     ColorFont [3] := 65280;
     ColorFont [4] := 16711935;
-    for i := 1 to 4 do
-        begin
-          k := Random (4)+1;
-          l := Random (4)+1;
-          ColorFont [5] := ColorFont[k];
-          ColorFont [k] := ColorFont[l];
-          ColorFont [l] := ColorFont[5];
-        end;
+    Measure [1] := ' бит';
+    Measure [2] := ' байт';
+    Measure [3] := ' Кбайт';
+    Measure [4] := ' Мбайт';
+    Measure [5] := ' Гбайт';
+
+
+  for i := 1 to 5 do
+    Begin
+       NumberOnImage[i,1].MyColor := ColorFont[Random(5)];
+       NumberOnImage[i,2].MyColor := ColorFont[Random(5)];
+
+    End;
     TimeNow := Time;
     Timer1.Enabled := True;
     StopWatch.Visible := True;
-   k := Random(4)+1;
-   l := Random(3)+1;
    for i :=1 to 5 do
+    for k := 1 to 2 do       
       Begin
-          Top1 := Random (600) + 25;
-          Top2 := Random (600) + 25;
-          Left1 := Random (450) + 200;
-          Left2 := Random (450) + 200;
-          PanelL [i,1].Top := Top1;
-          PanelL [i,2].Top := Top2;
-          PanelL [i,1].Left := Left1;
-          PanelL [i,2].Left := Left2;
-          PanelL [i,1].Visible := True;
-          PanelL [i,2].Visible := True;
-          PanelL [i,1].Font.Color := ColorFont [k];
-          x := k+l; if x > 4 Then x := x-4;
-          PanelL [i,2].Font.Color := ColorFont [x];
-          k := k+1; if k > 4  then k := k-4;
+          PanelL [i,k].Top := Random (600) + 25;
+          PanelL [i,k].Left := Random (450) + 200;
+          PanelL [i,k].Visible := True;
       End;
-      Bit:= ' бит';
+
    case Level of
     1: Begin
-       FillChar(kli,sizeof(kli),0);
        l:=1;
        Repeat
-         k := Random (24)+1; Yes := False; i := 1;
+         k := Random (ClassLevel*10)+1; Yes := False; i := 1;
           While (Not Yes) and (i < 5) do
             Begin
-              if k = kli [i,1] then Yes := True;
+              if k = NumberOnImage[i,1].MyNumber then Yes := True;
               i := i +1;
             End;
           if Not Yes Then
             Begin
-              kli [l,1] := k; Kli [l,2] := k*8;
+              NumberOnImage [l,1].MyNumber := k; NumberOnImage [l,2].MyNumber := k*8;
               l := l+1;
             End;
        Until l=6;
        For i := 1 to 5 do
           Begin
-            kl [i,1] := IntToStr (kli[i,1]) + ' Байт';
-            kl [i,2] := IntToStr (kli[i,2]) + ' Бит';
+            NumberOnImage [i,1].MyMeasure := 2;
+            NumberOnImage [i,2].MyMeasure := 1;
           End;
-
         End;
     2: Begin
-            k := Random (26)+5;
-            kl [1,1] := IntToStr (k) + ' Байт';
-            kl [1,2] := IntToStr(8*k) + ' Бит';
-            k := Random (5)+8;
-            kl [2,1] := IntToStr (k) + ' кбайт';
-            kl [2,2] := IntToStr (k*1024) + ' Байт';
-            k := Random (8)+1;
-            kl [3,1] := IntToStr (k) + ' Мбайт';
-            kl [3,2] := IntToStr (k*1024) + ' кбайт';
-            k := Random (4)+1;
-            kl [4,1] := IntToStr (k) + ' кбайт';
-            kl [4,2] := IntToStr (k*1024*8) + ' Бит';
-            k := Random (3)+5;
-            kl [5,1] := IntToStr (k) + ' кбайт';
-            kl [5,2] := IntToStr (k*1024*8) + ' Бит';
-
+            NumberOnImage [1,1].MyNumber := Random (ClassLevel*8)+5;
+            NumberOnImage [1,1].MyMeasure := 2;
+            NumberOnImage [1,2].MyNumber := NumberOnImage [1,1].MyNumber * 8;
+            NumberOnImage [1,2].MyMeasure := 1;
+            NumberOnImage [2,1].MyNumber := Random (ClassLevel*5)+1;
+            NumberOnImage [2,1].MyMeasure := 3;
+            NumberOnImage [2,2].MyNumber := NumberOnImage [2,1].MyNumber * 1024;
+            NumberOnImage [2,2].MyMeasure := 2;
+            NumberOnImage [3,1].MyNumber := Random (ClassLevel*4)+1;
+            NumberOnImage [3,1].MyMeasure := 4;
+            NumberOnImage [3,2].MyNumber := NumberOnImage [3,1].MyNumber * 1024;
+            NumberOnImage [3,2].MyMeasure := 3;
+            NumberOnImage [4,1].MyNumber := Random (ClassLevel*3)+1;
+            NumberOnImage [4,1].MyMeasure := 3;
+            NumberOnImage [4,2].MyNumber := NumberOnImage [4,1].MyNumber * 1024*8;
+            NumberOnImage [4,2].MyMeasure := 1;
+            NumberOnImage [5,1].MyNumber := Random (ClassLevel*3)+5;
+            NumberOnImage [5,1].MyMeasure := 3;
+            NumberOnImage [5,2].MyNumber := NumberOnImage [5,1].MyNumber * 1024*8;
+            NumberOnImage [5,2].MyMeasure := 1;
        End;
     3: Begin
-            With Expr do
-            Begin
-
-            k := Random (18)+9;
-            kStr := IntToStr(k);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(Bit));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image1.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[1,1].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-            //kl [1,1] := '2^' + IntToStr (k) + ' Бит';
-            kStr := IntToStr(k-3);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' байт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image2.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[1,2].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-            //kl [1,2] := '2^' + IntToStr(k-3) + ' Байт';
-            k := Random (18)+14;
-            kStr := IntToStr(k);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(Bit));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image3.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[2,1].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-            //kl [2,1] := '2^' + IntToStr (k) + ' Бит';
-            kStr := IntToStr(k-13);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' кбайт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image4.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[2,2].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [2,2] := '2^' + IntToStr (k-13) + ' кбайт';
-            k := Random (8)+24;
-            kStr := IntToStr(k);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(Bit));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image5.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[3,1].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [3,1] := '2^' + IntToStr (k) + ' Бит';
-            kStr := IntToStr(k-23);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' Мбайт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image6.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[3,2].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [3,2] := '2^' + IntToStr (k-23) + ' Мбайт';
-            k := Random (18)+21;
-            kStr := IntToStr(k);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' байт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image7.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[4,1].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [4,1] := '2^' + IntToStr (k) + ' байт';
-            kStr := IntToStr(k-20);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' Мбайт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image8.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[4,2].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [4,2] := '2^' + IntToStr (k-20) + ' Мбайт';
-
-            k := Random (18)+17;
-            kStr := IntToStr(k);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(Bit));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image9.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[5,1].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [5,1] := '2^' + IntToStr (k) + ' Бит';
-            kStr := IntToStr(k-13);
-            Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(kStr));
-            AddNext (TExprVar.Create(' кбайт'));
-            Expr:=TExprChain.Create(Expr);
-            Canvas := Image10.Canvas;
-            Font.Size := 18;
-            Font.Style:=[fsBold];
-            Color := PanelL[5,2].Font.Color;
-            Draw(75,32,ehCenter,evCenter);
-            Free;
-//            kl [5,2] := '2^' + IntToStr (k-13) + ' кбайт';
-            End;
+            for i := 1 to 5 do
+              for k := 1 to 2 do
+                           NumberOnImage [i,k].MyNumber := 0;
+            NumberOnImage [1,1].MySize := Random (ClassLevel*7)+9;
+            NumberOnImage [1,1].MyMeasure := 1;
+            NumberOnImage [1,2].MySize := NumberOnImage [1,1].MySize-3;
+            NumberOnImage [1,2].MyMeasure := 2;
+            NumberOnImage [2,1].MySize := Random (ClassLevel*6)+14;
+            NumberOnImage [2,1].MyMeasure := 1;
+            NumberOnImage [2,2].MySize := NumberOnImage [2,1].MySize-13;
+            NumberOnImage [2,2].MyMeasure := 3;
+            NumberOnImage [3,1].MySize := Random (ClassLevel*4)+24;
+            NumberOnImage [3,1].MyMeasure := 1;
+            NumberOnImage [3,2].MySize := NumberOnImage [3,1].MySize-23;
+            NumberOnImage [3,2].MyMeasure := 4;
+            NumberOnImage [4,1].MySize := Random (ClassLevel*7)+21;
+            NumberOnImage [4,1].MyMeasure := 2;
+            NumberOnImage [4,2].MySize := NumberOnImage [4,1].MySize-20;
+            NumberOnImage [4,2].MyMeasure := 4;
+            NumberOnImage [5,1].MySize := Random (ClassLevel*7)+17;
+            NumberOnImage [5,1].MyMeasure := 1;
+            NumberOnImage [5,2].MySize := NumberOnImage [5,1].MySize-13;
+            NumberOnImage [5,2].MyMeasure := 3;
        End;
     4: Begin
-            for I := 1 to 5 do
+      NumberOnImage [1,1].MyNumber := Random (ClassLevel*24)+2;
+      NumberOnImage [2,1].MyNumber := Random (ClassLevel*24)+1;
+      NumberOnImage [3,1].MyNumber := Random (ClassLevel*24)+1;
+      NumberOnImage [4,1].MyNumber := Random (ClassLevel*24)+1;
+      NumberOnImage [5,1].MyNumber := Random (ClassLevel*24)+1;
+        for i := 1 to 5 do
+            If NumberOnImage [i,1].MyNumber mod 2 = 1 Then Inc(NumberOnImage [i,1].MyNumber);
+      NumberOnImage [1,1].MySize := Random (12) + 4;
+      NumberOnImage [1,1].MyMeasure := 1;      // первая единица измерения
+      NumberOnImage [1,2].MyNumber := NumberOnImage [1,1].MyNumber;
+      NumberOnImage [1,2].MySize := NumberOnImage [1,1].MySize - 3;
+       NumberOnImage [2,1].MySize := Random (12) + 13;
+       NumberOnImage [2,1].MyMeasure := 1;     // первая единица измерения
+       NumberOnImage [2,2].MyNumber := NumberOnImage [2,1].MyNumber;
+       NumberOnImage [2,2].MySize := NumberOnImage [2,1].MySize - 13;
+      NumberOnImage [3,1].MySize := Random (12) + 23;
+      NumberOnImage [3,1].MyMeasure := 1;     // первая единица измерения
+      NumberOnImage [3,2].MyNumber := NumberOnImage [3,1].MyNumber;
+      NumberOnImage [3,2].MySize := NumberOnImage [3,1].MySize - 23;
+       NumberOnImage [4,1].MySize := Random (12) + 20;
+       NumberOnImage [4,1].MyMeasure := 2;     // первая единица измерения
+       NumberOnImage [4,2].MyNumber := NumberOnImage [4,1].MyNumber;
+       NumberOnImage [4,2].MySize := NumberOnImage [4,1].MySize - 20;
+      NumberOnImage [5,1].MySize := Random (12) + 13;
+      NumberOnImage [5,1].MyMeasure := 1;     // первая единица измерения
+      NumberOnImage [5,2].MyNumber := NumberOnImage [5,1].MyNumber;
+      NumberOnImage [5,2].MySize := NumberOnImage [5,1].MySize - 13;
+        for i := 1 to 5 do
+          Begin
+             While NumberOnImage [i,2].MyNumber mod 2 = 0 do
               Begin
-                PanelL[i,1].Font.Size := 12;
-                PanelL[i,2].Font.Size := 12;
+                NumberOnImage [i,2].MyNumber := NumberOnImage [i,2].MyNumber div 2;
+                Inc(NumberOnImage [i,2].MySize);
               End;
-
-            k := Random (9)+9;
-            Top1 := Random (9) + 1;
-            kl [1,1] := IntToStr (Stepen(Top1)) + '*' + '2^' + IntToStr(k) + ' Бит';
-            kl [1,2] := '2^' + IntToStr(k + Top1 - 3) + ' Байт';
-            k := Random (18)+14;
-            Top1 := Random (9) + 1;
-            kl [2,1] := IntToStr (Stepen(Top1)) + '*' + '2^' + IntToStr (k) + ' Бит';
-            kl [2,2] := '2^' + IntToStr (k + Top1 - 13) + ' кбайт';
-            k := Random (8)+24;
-            Top1 := Random (9) + 1;
-            kl [3,1] := IntToStr (Stepen(Top1)) + '*' + '2^' + IntToStr (k) + ' Бит';
-            kl [3,2] := '2^' + IntToStr (k + Top1 - 23) + ' Мбайт';
-            k := Random (18)+21;
-            Top1 := Random (9) + 1;
-            kl [4,1] := IntToStr (Stepen(Top1)) + '*' + '2^' + IntToStr (k) + ' байт';
-            kl [4,2] := '2^' + IntToStr (k + Top1 - 20) + ' Мбайт';
-
-            k := Random (18)+17;
-            Top1 := Random (9) + 1;
-            kl [5,1] := IntToStr (Stepen(Top1)) + '*' + '2^' + IntToStr (k) + ' Бит';
-            kl [5,2] := '2^' + IntToStr (k + Top1 - 13) + ' кбайт';
-
-      End;
+            If NumberOnImage[i,2].MySize = 1 then
+                Begin
+                  NumberOnImage[i,2].MySize := 0;
+                  NumberOnImage[i,2].MyNumber := NumberOnImage[1,2].MyNumber*2;
+                End;
+            if NumberOnImage[i,2].MyNumber = 1 then NumberOnImage[i,2].MyNumber:=0;
+          End;
+            NumberOnImage [1,2].MyMeasure := 2;     // вторая единица измерения
+            NumberOnImage [2,2].MyMeasure := 3;
+            NumberOnImage [3,2].MyMeasure := 4;
+            NumberOnImage [4,2].MyMeasure := 4;
+            NumberOnImage [5,2].MyMeasure := 3;
+       End;
    end;
-
+      for i := 1 to 5 do
+        for k := 1 to 2 do
+          With Expr do
+          Begin
+            FontSize := 18;
+            if NumberOnImage[i,k].MyNumber > 999 then
+              Begin
+               Bit := IntToStr(NumberOnImage[i,k].MyNumber div 1000) + ' ' + IntToStr((NumberOnImage[i,k].MyNumber mod 1000) div 100) + IntToStr((NumberOnImage[i,k].MyNumber mod 100) div 10) + IntToStr(NumberOnImage[i,k].MyNumber mod 10);
+               Expr := TExprVar.Create(Bit);
+              End Else
+                If NumberOnImage[i,k].MyNumber > 0 Then
+                  Begin
+                     Expr := TExprVar.Create(IntToStr(NumberOnImage[i,k].MyNumber));  // первое число
+                          If NumberOnImage[i,k].MySize > 0 Then
+                            Begin
+                              AddNext(TExprSign.Create(esCrossMultiply));
+                              AddNext(TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(IntToStr(NumberOnImage[i,k].MySize))));     // двойка в степени
+                              FontSize := FontSize-4;
+                            End;
+                  End Else
+                       Begin
+                        if NumberOnImage[i,k].MySize = 1 then Expr := TExprVar.Create('2') Else
+                                   Expr := TExprIndex.Create(TExprVar.Create('2'),nil,TExprVar.Create(IntToStr(NumberOnImage[i,k].MySize)));
+                        FontSize := FontSize-2;
+                      End;
+        AddNext (TExprVar.Create(Measure[NumberOnImage[i,k].MyMeasure]));                       // единица измерения
+        Expr:=TExprChain.Create(Expr);
+        Canvas := ImageL[i,k].Canvas;
+        Font.Size := FontSize;
+        Font.Style:=[fsBold];
+        Color := NumberOnImage[i,k].MyColor;
+        Draw(75,32,ehCenter,evCenter);
+        Free;
+       End;
 ResultButton.Enabled := True;
 end;
 
