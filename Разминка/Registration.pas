@@ -45,7 +45,7 @@ begin
     Incorrect := False;
     Sln := LastNameEdit.Text;
     Len := Length (Sln);
-    for i := 1 to Len do
+{    for i := 1 to Len do
         if ((Ord (Sln[i]) < 1040) or (Ord (Sln[i]) > 1103)) then Incorrect := True; //проверка на русский язык
     Sln := NameEdit.Text;
     Len := Length (Sln);
@@ -62,10 +62,10 @@ begin
       School := Klass.Items [Klass.ItemIndex]+ ' ' + KlassLetter.Items [Klass.ItemIndex];
       LastName := LastNameEdit.Text;
       Razm.RegLabel.Caption :=   LastName+ ' ' + NameI + ' ' + School;
-      SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';
+      SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';  }
 // убрать следующие две строки после включения регистрации
-{Razm.RegLabel.Caption := 'Евлампьев Александр 11 Я';
-SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';        }
+Razm.RegLabel.Caption := 'Евлампьев Александр 11 Я';
+SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + '0';
 
       Razm.RegLabel.Visible := True;
 
@@ -86,7 +86,7 @@ SendText := Razm.RegLabel.Caption + ' ' + IntToStr(Level) + ' ' + '0:0' + ' ' + 
       Close;
     End;
 
-End;{}
+{End;}
 
 procedure TFormRegistration.LastNameEditClick(Sender: TObject);
 begin
