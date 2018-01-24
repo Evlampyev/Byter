@@ -267,8 +267,19 @@ procedure TRazm.FormCreate(Sender: TObject);
  Var
     i, k, l: Byte;
 begin
+  Fon.Picture.LoadFromFile('pictures\fons\Main1920X1080.jpg');
+
+  l := Trunc ((Razm.ClientHeight-5*Panel11.Height-ResultButton.Height-20)/7);
+  Memo1.Lines.Add(IntToStr(i));
+  ResultButton.Top := l*6 + 5*Panel11.Height+15;
+  ExitPanel.Top := ResultButton.Top;
+
   for i := 0 to ComponentCount-1 do   // Заполнение массивов имеющимися элементами с формы
     Begin
+     {if Components[i].Tag < 10 then
+         (Sender as TImage).Top := l*Tag + (Tag-1)*PanelA[1,1].Height+((PanelA[1,1].Height-Height) div 2);}
+
+
      if Components[i].Tag > 100 Then
         PanelA [(Components[i].Tag div 100), (Components[i].Tag mod 10)] := (Components[i] as TPanel)
         Else
@@ -278,12 +289,21 @@ begin
              IF Components[i].ClassType=TImage Then ImageL [Components[i].Tag div 10, Components[i].Tag mod 10] := (Components[i] as TImage);
             End;
     End;
-for i := 1 to 5 do
+    Ravno1.Top := l*Ravno1.Tag + PanelA[1,1].Height*(Ravno1.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+    Ravno2.Top := l*Ravno2.Tag + PanelA[1,1].Height*(Ravno2.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+    Ravno3.Top := l*Ravno3.Tag + PanelA[1,1].Height*(Ravno3.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+    Ravno4.Top := l*Ravno4.Tag + PanelA[1,1].Height*(Ravno4.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+    Ravno5.Top := l*Ravno5.Tag + PanelA[1,1].Height*(Ravno5.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+
+for i := 1 to 5 do   //расстановка компонентов на форме
   for k := 1 to 2 do
     Begin
-     PanelA[i,k].Top := 23+117*(i-1);
+     PanelA[i,k].Top := l*i+Panel11.Height*(i-1);
      PanelA[i,k].Left := 830 + 300*(k-1);
   End;
+  ResultButton.Left := PanelA[1,1].Left;
+  ExitPAnel.Width := Trunc((98/112)*ExitPanel.Height)+2;
+  ExitPanel.Left := PanelA[1,2].Left+PanelA[1,2].Width-ExitPanel.Width;
 
     Gif := TGifImage.Create;
     Gif.LoadFromFile('Pictures\Gif\Blink.gif');
