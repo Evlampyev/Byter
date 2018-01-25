@@ -1,31 +1,17 @@
 ﻿object Form1: TForm1
-  AlignWithMargins = True
   Left = 0
   Top = 0
-  Margins.Left = 8
-  Margins.Top = 8
-  Margins.Right = 8
-  Margins.Bottom = 8
   Caption = 'Form1'
   ClientHeight = 562
-  ClientWidth = 804
+  ClientWidth = 805
   Color = clBtnFace
-  Constraints.MinHeight = 600
-  Constraints.MinWidth = 820
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  Padding.Left = 8
-  Padding.Top = 8
-  Padding.Right = 8
-  Padding.Bottom = 8
   OldCreateOrder = False
   OnCreate = FormCreate
-  DesignSize = (
-    804
-    562)
   PixelsPerInch = 96
   TextHeight = 13
   object ResultTable: TStringGrid
@@ -33,11 +19,6 @@
     Top = 8
     Width = 474
     Height = 546
-    Margins.Left = 8
-    Margins.Top = 8
-    Margins.Right = 8
-    Margins.Bottom = 8
-    Align = alLeft
     ColCount = 6
     DefaultDrawing = False
     FixedCols = 0
@@ -199,17 +180,12 @@
     Width = 300
     Height = 290
     Caption = 'ChampionPanel'
-    Padding.Left = 10
-    Padding.Top = 10
-    Padding.Right = 10
-    Padding.Bottom = 10
     TabOrder = 3
     object Panel3: TPanel
-      Left = 11
-      Top = 11
-      Width = 278
+      Left = 12
+      Top = 8
+      Width = 277
       Height = 51
-      Align = alTop
       Caption = #1056#1077#1082#1086#1088#1076#1099
       Font.Charset = RUSSIAN_CHARSET
       Font.Color = clBlue
@@ -220,11 +196,10 @@
       TabOrder = 0
     end
     object ChampionGrid: TStringGrid
-      Left = 11
-      Top = 110
-      Width = 278
+      Left = 12
+      Top = 103
+      Width = 277
       Height = 169
-      Align = alBottom
       DefaultDrawing = False
       FixedCols = 0
       TabOrder = 1
@@ -243,8 +218,8 @@
         24)
     end
     object ButLev1: TBitBtn
-      Left = 14
-      Top = 68
+      Left = 12
+      Top = 66
       Width = 63
       Height = 32
       Caption = 'I'
@@ -313,16 +288,10 @@
     OnClick = ResetBitBtnClick
   end
   object ExitPanel: TPanel
-    AlignWithMargins = True
-    Left = 705
-    Top = 452
-    Width = 92
-    Height = 102
-    Margins.Left = 8
-    Margins.Top = 8
-    Margins.Right = 8
-    Margins.Bottom = 8
-    Anchors = [akRight, akBottom]
+    Left = 702
+    Top = 450
+    Width = 95
+    Height = 104
     BorderWidth = 2
     BorderStyle = bsSingle
     Caption = 'ExitPanel'
