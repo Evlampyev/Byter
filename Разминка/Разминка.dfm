@@ -1919,6 +1919,7 @@
     Height = 21
     TabOrder = 18
     Text = 'Edit1'
+    Visible = False
   end
   object ServerOptionPanel: TPanel
     Left = 8
@@ -2004,6 +2005,7 @@
     Height = 33
     Caption = #1055#1086#1089#1083#1072#1090#1100
     TabOrder = 20
+    Visible = False
     OnClick = SendButtomClick
   end
   object ExitPanel: TPanel
@@ -2108,6 +2110,7 @@
     Lines.Strings = (
       'Memo1')
     TabOrder = 26
+    Visible = False
   end
   object MainMenu1: TMainMenu
     Left = 368

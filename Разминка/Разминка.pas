@@ -287,12 +287,6 @@ begin
             End;
     End;
 
-    for I := 1 to 5 do
-    Begin
-        ImPer := FindComponent('Ravno'+IntToStr(i)) as TImage;
-        ImPer.Picture.LoadFromFile('Pictures\Ather\Ravno.png');
-        Imper.Top := l*Imper.Tag + PanelA[1,1].Height*(Imper.Tag-1) + (PanelA[1,1].Height-ImPer.Height) div 2;
-    End;
 
 
 for i := 1 to 5 do   //расстановка компонентов на форме
@@ -304,6 +298,12 @@ for i := 1 to 5 do   //расстановка компонентов на форме
   ResultButton.Left := PanelA[1,1].Left;
   ExitPAnel.Width := Trunc((98/112)*ExitPanel.Height)+2;
   ExitPanel.Left := PanelA[1,2].Left+PanelA[1,2].Width-ExitPanel.Width;
+  for I := 1 to 5 do
+    Begin
+        ImPer := FindComponent('Ravno'+IntToStr(i)) as TImage;
+        ImPer.Picture.LoadFromFile('Pictures\Ather\Ravno.png');
+        Imper.Top := PanelA[i,1].Top;
+    End;
 
    { Gif := TGifImage.Create;
     Gif.LoadFromFile('Pictures\Gif\Blink.gif');
@@ -434,13 +434,13 @@ for i := 1 to 5 do
 q:=1; w:=1;
 While (q < 6) and (w < 3) do
 Begin
-for i := q to 5 do
+for i := 1 to 5 do
   for k := 1 to 2 do
     Begin
-        if (PanelL[q,w].Top = PanelL[i,k].Top) and ((q<>i) or (w<>k)) and (PanelL[i,k].Visible=True) then
+        if (PanelL[q,w].Top = PanelL[i,k].Top) and ((q<>i) or (w<>k)) and (PanelL[i,k].Cursor=crHandPoint)then
           Begin
-           PanelL[i,k].Visible := False;
-           PanelL [q,w].Visible := False;
+           PanelL[i,k].Cursor := crDefault;
+           PanelL[q,w].Cursor := crDefault;
            If NumberOnImage[q,w].MyNumber = 0 Then Inc(NumberOnImage[q,w].MyNumber);   //только дл€ подсчЄтов
            If NumberOnImage[i,k].MyNumber = 0 Then Inc(NumberOnImage[i,k].MyNumber);   //только дл€ подсчЄтов
            If NumberOnImage[q,w].MyNumber*Stepen(NumberOnImage[q,w].MySize)*ResultKoef[NumberOnImage[q,w].MyMeasure] = NumberOnImage[i,k].MyNumber*Stepen(NumberOnImage[i,k].MySize)*ResultKoef[NumberOnImage[i,k].MyMeasure] Then
@@ -448,7 +448,7 @@ for i := q to 5 do
                 Inc(Mark);
                 z:=1;
                 ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
-                while ImPer.Top <> PanelA [q,w].Top do
+                while ImPer.Top <> (PanelL [q,w].Top-6) do
                   Begin
                    Inc(z);
                    ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
@@ -458,14 +458,14 @@ for i := q to 5 do
                     Begin
                       z:=1;
                       ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
-                      while ImPer.Top <> PanelA [q,w].Top do
+                      while ImPer.Top <> (PanelL [q,w].Top-6) do
                         Begin
                          Inc(z);
                          ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
                         End;
                       ImPer.Picture.LoadFromFile('Pictures\Ather\Minus.png');
                     End;
-              Break;
+
           End;
     End;
 w:=w+1;
@@ -500,13 +500,13 @@ for I := 1 to 5 do
     Begin
         (FindComponent('Ravno'+IntToStr(i)) as TImage).Picture.LoadFromFile('Pictures\Ather\Ravno.png');
     End;
-
-
 for i :=1 to 5 do
   for k := 1 to 2 do
-          ImageL[i, k].Picture := nil;
+          Begin
+            ImageL[i, k].Picture := nil;
+            PanelL[i,k].Cursor := crHandPoint;
+          End;
 FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
-
     ColorFont [0] := 0;
     ColorFont [1] := RGB(0,0,255);
     ColorFont [2] := 255;
@@ -518,18 +518,16 @@ FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
     Measure [4] := ' ћбайт';
     Measure [5] := ' √байт';
 
-
   for i := 1 to 5 do
     Begin
        NumberOnImage[i,1].MyColor := ColorFont[Random(5)];
        NumberOnImage[i,2].MyColor := ColorFont[Random(5)];
-
     End;
     TimeNow := Time;
     Timer1.Enabled := True;
     StopWatch.Visible := True;
    for i :=1 to 5 do
-    for k := 1 to 2 do       
+    for k := 1 to 2 do
       Begin
           PanelL [i,k].Top := Random (600) + 25;
           PanelL [i,k].Left := Random (450) + 200;
