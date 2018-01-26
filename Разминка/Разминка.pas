@@ -266,6 +266,7 @@ end;
 procedure TRazm.FormCreate(Sender: TObject);
  Var
     i, k, l: Byte;
+    ImPer: TImage;
 begin
   Fon.Picture.LoadFromFile('pictures\fons\Main1920X1080.jpg');
 
@@ -276,10 +277,6 @@ begin
 
   for i := 0 to ComponentCount-1 do   // Заполнение массивов имеющимися элементами с формы
     Begin
-     {if Components[i].Tag < 10 then
-         (Sender as TImage).Top := l*Tag + (Tag-1)*PanelA[1,1].Height+((PanelA[1,1].Height-Height) div 2);}
-
-
      if Components[i].Tag > 100 Then
         PanelA [(Components[i].Tag div 100), (Components[i].Tag mod 10)] := (Components[i] as TPanel)
         Else
@@ -289,11 +286,14 @@ begin
              IF Components[i].ClassType=TImage Then ImageL [Components[i].Tag div 10, Components[i].Tag mod 10] := (Components[i] as TImage);
             End;
     End;
-    Ravno1.Top := l*Ravno1.Tag + PanelA[1,1].Height*(Ravno1.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
-    Ravno2.Top := l*Ravno2.Tag + PanelA[1,1].Height*(Ravno2.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
-    Ravno3.Top := l*Ravno3.Tag + PanelA[1,1].Height*(Ravno3.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
-    Ravno4.Top := l*Ravno4.Tag + PanelA[1,1].Height*(Ravno4.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
-    Ravno5.Top := l*Ravno5.Tag + PanelA[1,1].Height*(Ravno5.Tag-1) + (PanelA[1,1].Height-Ravno1.Height) div 2;
+
+    for I := 1 to 5 do
+    Begin
+        ImPer := FindComponent('Ravno'+IntToStr(i)) as TImage;
+        ImPer.Picture.LoadFromFile('Pictures\Ather\Ravno.png');
+        Imper.Top := l*Imper.Tag + PanelA[1,1].Height*(Imper.Tag-1) + (PanelA[1,1].Height-ImPer.Height) div 2;
+    End;
+
 
 for i := 1 to 5 do   //расстановка компонентов на форме
   for k := 1 to 2 do
@@ -305,7 +305,7 @@ for i := 1 to 5 do   //расстановка компонентов на форме
   ExitPAnel.Width := Trunc((98/112)*ExitPanel.Height)+2;
   ExitPanel.Left := PanelA[1,2].Left+PanelA[1,2].Width-ExitPanel.Width;
 
-    Gif := TGifImage.Create;
+   { Gif := TGifImage.Create;
     Gif.LoadFromFile('Pictures\Gif\Blink.gif');
     Gif.Animate := True;
     Gif.AnimateLoop := glEnabled;
@@ -313,7 +313,8 @@ for i := 1 to 5 do   //расстановка компонентов на форме
     Ravno2.Picture.Assign(Gif);
     Ravno3.Picture.Assign(Gif);
     Ravno4.Picture.Assign(Gif);
-    Ravno5.Picture.Assign(Gif);
+    Ravno5.Picture.Assign(Gif);}
+
       ExitGif := TGifImage.Create;
       ExitGif.LoadFromFile('Pictures\Gif\ExitLive.gif');
       ExitGif.Animate := True;
@@ -411,6 +412,7 @@ Var
   TopFirst, Shag: Word;
   ResultKoef: Array [1..4] of Longint;
   k: Integer;
+  ImPer :TImage;
 begin
  TimeOne := Time-TimeNow;
  Timer1.Enabled := False;
@@ -428,7 +430,7 @@ for i := 1 to 5 do
     Begin
       if PanelL[i,1].Top = PanelL[i,2].Top then Mark := Mark +1;
     End;}
-TopFirst := PanelL[1,1].Top+6; Shag := 117;
+{TopFirst := PanelL[1,1].Top+6; Shag := 117;  }
 q:=1; w:=1;
 While (q < 6) and (w < 3) do
 Begin
@@ -439,10 +441,31 @@ for i := q to 5 do
           Begin
            PanelL[i,k].Visible := False;
            PanelL [q,w].Visible := False;
-           If NumberOnImage[q,w].MyNumber = 0 Then Inc(NumberOnImage[q,w].MyNumber);
-           If NumberOnImage[i,k].MyNumber = 0 Then Inc(NumberOnImage[i,k].MyNumber);
-           If NumberOnImage[q,w].MyNumber*Stepen(NumberOnImage[q,w].MySize)*ResultKoef[NumberOnImage[q,w].MyMeasure] = NumberOnImage[i,k].MyNumber*Stepen(NumberOnImage[i,k].MySize)*ResultKoef[NumberOnImage[i,k].MyMeasure] Then Inc(Mark);
-           Break;
+           If NumberOnImage[q,w].MyNumber = 0 Then Inc(NumberOnImage[q,w].MyNumber);   //только для подсчётов
+           If NumberOnImage[i,k].MyNumber = 0 Then Inc(NumberOnImage[i,k].MyNumber);   //только для подсчётов
+           If NumberOnImage[q,w].MyNumber*Stepen(NumberOnImage[q,w].MySize)*ResultKoef[NumberOnImage[q,w].MyMeasure] = NumberOnImage[i,k].MyNumber*Stepen(NumberOnImage[i,k].MySize)*ResultKoef[NumberOnImage[i,k].MyMeasure] Then
+              Begin
+                Inc(Mark);
+                z:=1;
+                ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
+                while ImPer.Top <> PanelA [q,w].Top do
+                  Begin
+                   Inc(z);
+                   ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
+                  End;
+                ImPer.Picture.LoadFromFile('Pictures\Ather\Plus.png');
+              End Else
+                    Begin
+                      z:=1;
+                      ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
+                      while ImPer.Top <> PanelA [q,w].Top do
+                        Begin
+                         Inc(z);
+                         ImPer := FindComponent('Ravno'+IntToStr(z)) as TImage;
+                        End;
+                      ImPer.Picture.LoadFromFile('Pictures\Ather\Minus.png');
+                    End;
+              Break;
           End;
     End;
 w:=w+1;
@@ -468,10 +491,17 @@ Var
   Yes : Boolean;
   Expr: TExprClass;
   Bit: String[7];
+  ImPer: TImage;
 
 begin
 N2.Enabled := False;
 Sopos.Enabled := False;
+for I := 1 to 5 do
+    Begin
+        (FindComponent('Ravno'+IntToStr(i)) as TImage).Picture.LoadFromFile('Pictures\Ather\Ravno.png');
+    End;
+
+
 for i :=1 to 5 do
   for k := 1 to 2 do
           ImageL[i, k].Picture := nil;

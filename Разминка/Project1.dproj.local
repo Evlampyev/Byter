@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.844,=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.909,C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Project1.dproj=K:\Мои проекты\Разминка\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.983,C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.pas=K:\Мои проекты\Разминка\Разминка.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.959,K:\Еще копия\Oprogr.pas=K:\Еще копия\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.796,=K:\Мои проекты\Разминка\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.857,K:\Мои проекты\Разминка\Registration.dfm=K:\Мои проекты\Разминка\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.857,K:\Мои проекты\Разминка\Registration.pas=K:\Мои проекты\Разминка\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.844,=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.857,K:\Мои проекты\Разминка\Unit1.pas=K:\Мои проекты\Разминка\Registration.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.857,K:\Мои проекты\Разминка\Unit1.dfm=K:\Мои проекты\Разминка\Registration.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.983,K:\Мои проекты\Разминка\Разминка.pas=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.959,K:\Еще копия\Unit1.pas=K:\Еще копия\Oprogr.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.909,K:\Мои проекты\Разминка\Project1.dproj=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.754,=K:\Еще копия\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.959,K:\Еще копия\Oprogr.dfm=K:\Еще копия\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.983,C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.dfm=K:\Мои проекты\Разминка\Разминка.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.983,K:\Мои проекты\Разминка\Разминка.dfm=C:\Users\Alex-Gamer\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.959,K:\Еще копия\Unit1.dfm=K:\Еще копия\Oprogr.dfm</Transaction>
   </Transactions>
 </BorlandProject>

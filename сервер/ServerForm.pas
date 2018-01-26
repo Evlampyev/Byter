@@ -149,6 +149,20 @@ begin
       ColWidths [4] := 41;  // Верно
       Rows[0].CommaText := '"№ п/п","Фамилия и имя",Класс,Время,Верно';
     End;
+    ChampionPanel.Width := Form1.ClientWidth-30-ResultTable.Width;
+    ButLev1.Left := ChampionPanel.Padding.Left;
+    ButLev1.Top := 20+Panel3.Height;
+    ButLev2.Top := ButLev1.Top;
+    ButLev3.Top := ButLev1.Top;
+    ButLev4.Top := ButLev1.Top;
+    Memo1.Top := ChampionPanel.Height + 20;
+    ResetBitBtn.Left := Trunc ((Form1.ClientWidth - 20 - ResultTable.Width - ResetBitBtn.Width - ExitPanel.Width)/2)+10 + ResultTable.Width;
+    BtnOption.Left := ResetBitBtn.Left;
+    ResetBitBtn.Top := Trunc((Form1.ClientHeight - 20 - Memo1.Height - ChampionPanel.Height-2*ResetBitBtn.Height)/3) + (20 + Memo1.Height + ChampionPanel.Height);
+    BtnOption.Top := ResetBitBtn.Top + Trunc((Form1.ClientHeight - 20 - Memo1.Height - ChampionPanel.Height-2*ResetBitBtn.Height)/3) + ResetBitBtn.Height;
+
+
+
    Contestant := 1;
    GifExit := TGifImage.Create;
    GifExit.LoadFromFile('Pictures\Gif\ExitLive.gif');
@@ -156,6 +170,8 @@ begin
    GifExit.AnimateLoop := glEnabled;
    ExitPanel.Width := GifExit.Width+4-8;
    ExitPanel.Height := GifExit.Height+4-9;
+   ExitPanel.Left := Form1.ClientWidth - 8 - ExitPanel.Width;
+   ExitPanel.Top := Form1.ClientHeight - 8 - ExitPanel.Height;
    ExitImage.Top := 2;
    ExitImage.Left := 2;
    ExitImage.Picture.Assign(GifExit);
@@ -236,6 +252,8 @@ procedure TForm1.BtnOptionClick(Sender: TObject);
 Var
   NewLevel:String;
   begin
+  PanelOption.Height := ChampionPanel.Height;
+  PanelOption.Width := ChampionPanel.Width;
   NewLevel :='';
   if ButLev1.Font.Color = ClRed then NewLevel := 'I'
     Else if ButLev2.Font.Color = ClRed then NewLevel := 'II'
@@ -275,11 +293,6 @@ procedure TForm1.ButLev4Click(Sender: TObject);
 Begin
      ChampionShow(4);
 End;
-
-{Procedure TForm1.ButLevClick(Sender: Tobject);
-Begin
-
-End;    }
 
 Procedure TForm1.ChampionChange (OldPlace:byte);
 Const   NullRecType:MyRecord = ();

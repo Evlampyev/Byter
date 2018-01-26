@@ -17,10 +17,10 @@
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  Padding.Left = 8
-  Padding.Top = 8
-  Padding.Right = 8
-  Padding.Bottom = 8
+  Padding.Left = 10
+  Padding.Top = 10
+  Padding.Right = 10
+  Padding.Bottom = 10
   OldCreateOrder = False
   OnCreate = FormCreate
   DesignSize = (
@@ -29,10 +29,10 @@
   PixelsPerInch = 96
   TextHeight = 13
   object ResultTable: TStringGrid
-    Left = 8
-    Top = 8
+    Left = 10
+    Top = 10
     Width = 474
-    Height = 546
+    Height = 542
     Margins.Left = 8
     Margins.Top = 8
     Margins.Right = 8
@@ -70,10 +70,14 @@
     Top = 337
     Width = 300
     Height = 200
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'PanelOption'
     ShowCaption = False
     TabOrder = 1
     Visible = False
+    DesignSize = (
+      300
+      200)
     object Port: TLabel
       Left = 13
       Top = 20
@@ -118,6 +122,7 @@
       Top = 17
       Width = 145
       Height = 31
+      Anchors = [akTop, akRight]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -19
@@ -132,6 +137,7 @@
       Top = 54
       Width = 145
       Height = 31
+      Anchors = [akTop, akRight]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -19
@@ -145,7 +151,9 @@
       Left = 168
       Top = 144
       Width = 115
-      Height = 41
+      Height = 36
+      Cursor = crHandPoint
+      Anchors = [akTop]
       Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
       TabOrder = 2
       OnClick = OptionApplyBtnClick
@@ -155,6 +163,7 @@
       Top = 91
       Width = 145
       Height = 31
+      Anchors = [akTop, akRight]
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -19
@@ -169,7 +178,9 @@
       Top = 131
       Width = 115
       Height = 62
+      Cursor = crHandPoint
       Hint = #1053#1072#1078#1084#1080#1090#1077' '#1076#1083#1103' '#1091#1085#1080#1095#1090#1086#1078#1077#1085#1080#1103' '#1092#1072#1081#1083#1086#1074
+      Anchors = [akTop]
       Caption = #1059#1085#1080#1095#1090#1086#1078#1080#1090#1100' '#1088#1077#1082#1086#1088#1076#1099
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clGreen
@@ -185,35 +196,41 @@
     end
   end
   object Memo1: TMemo
-    Left = 496
-    Top = 312
-    Width = 301
-    Height = 129
+    Left = 495
+    Top = 337
+    Width = 302
+    Height = 100
+    Anchors = [akLeft, akRight, akBottom]
     Lines.Strings = (
       'Memo1')
     TabOrder = 2
   end
   object ChampionPanel: TPanel
-    Left = 496
-    Top = 8
-    Width = 300
-    Height = 290
+    Left = 495
+    Top = 10
+    Width = 302
+    Height = 318
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    BevelEdges = [beLeft, beTop, beRight]
     Caption = 'ChampionPanel'
     Padding.Left = 10
     Padding.Top = 10
     Padding.Right = 10
     Padding.Bottom = 10
     TabOrder = 3
+    DesignSize = (
+      302
+      318)
     object Panel3: TPanel
       Left = 11
       Top = 11
-      Width = 278
-      Height = 51
+      Width = 280
+      Height = 53
       Align = alTop
       Caption = #1056#1077#1082#1086#1088#1076#1099
       Font.Charset = RUSSIAN_CHARSET
       Font.Color = clBlue
-      Font.Height = -24
+      Font.Height = -27
       Font.Name = 'Times New Roman'
       Font.Style = [fsBold]
       ParentFont = False
@@ -221,10 +238,12 @@
     end
     object ChampionGrid: TStringGrid
       Left = 11
-      Top = 110
-      Width = 278
-      Height = 169
+      Top = 120
+      Width = 280
+      Height = 187
       Align = alBottom
+      Anchors = [akLeft, akTop, akRight, akBottom]
+      BevelEdges = [beLeft, beTop, beRight]
       DefaultDrawing = False
       FixedCols = 0
       TabOrder = 1
@@ -243,10 +262,13 @@
         24)
     end
     object ButLev1: TBitBtn
-      Left = 14
-      Top = 68
+      Left = 12
+      Top = 71
       Width = 63
-      Height = 32
+      Height = 36
+      Cursor = crHandPoint
+      Hint = #1042#1099#1073#1077#1088#1077#1090#1077' '#1091#1088#1086#1074#1077#1085#1100
+      Anchors = [akTop]
       Caption = 'I'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -254,14 +276,19 @@
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 2
       OnClick = ButLev1Click
     end
     object ButLev2: TBitBtn
-      Left = 83
-      Top = 65
+      Left = 84
+      Top = 71
       Width = 63
-      Height = 32
+      Height = 36
+      Cursor = crHandPoint
+      Hint = #1042#1099#1073#1077#1088#1077#1090#1077' '#1091#1088#1086#1074#1077#1085#1100
+      Anchors = [akTop]
       Caption = 'II'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -269,14 +296,19 @@
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 3
       OnClick = ButLev2Click
     end
     object ButLev3: TBitBtn
-      Left = 154
-      Top = 65
+      Left = 156
+      Top = 71
       Width = 63
-      Height = 32
+      Height = 36
+      Cursor = crHandPoint
+      Hint = #1042#1099#1073#1077#1088#1077#1090#1077' '#1091#1088#1086#1074#1077#1085#1100
+      Anchors = [akTop]
       Caption = 'III'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -284,14 +316,19 @@
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 4
       OnClick = ButLev3Click
     end
     object ButLev4: TBitBtn
-      Left = 226
-      Top = 66
+      Left = 228
+      Top = 71
       Width = 63
-      Height = 32
+      Height = 36
+      Cursor = crHandPoint
+      Hint = #1042#1099#1073#1077#1088#1077#1090#1077' '#1091#1088#1086#1074#1077#1085#1100
+      Anchors = [akTop]
       Caption = 'IV'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -299,23 +336,30 @@
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 5
       OnClick = ButLev4Click
     end
   end
   object ResetBitBtn: TBitBtn
     Left = 529
-    Top = 458
+    Top = 451
     Width = 113
-    Height = 33
+    Height = 36
+    Cursor = crHandPoint
+    Hint = #1054#1095#1080#1089#1090#1080#1090#1100' '#1086#1085#1083#1072#1081#1085' '#1088#1077#1079#1091#1083#1100#1090#1072#1090#1099
+    Anchors = [akBottom]
     Caption = #1057#1073#1088#1086#1089' '#1086#1085#1083#1072#1081#1085
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 4
     OnClick = ResetBitBtnClick
   end
   object ExitPanel: TPanel
     AlignWithMargins = True
-    Left = 705
-    Top = 452
+    Left = 701
+    Top = 448
     Width = 92
     Height = 102
     Margins.Left = 8
@@ -343,10 +387,15 @@
   end
   object BtnOption: TBitBtn
     Left = 529
-    Top = 513
+    Top = 508
     Width = 113
-    Height = 41
+    Height = 36
+    Cursor = crHandPoint
+    Hint = #1053#1072#1089#1090#1088#1086#1081#1082#1080' '#1089#1077#1088#1074#1077#1088#1072
+    Anchors = [akBottom]
     Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 6
     OnClick = BtnOptionClick
   end
