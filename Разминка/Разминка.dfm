@@ -1339,6 +1339,7 @@
     Height = 25
     Hint = #1042#1088#1077#1084#1103' '#1074#1099#1087#1086#1083#1085#1077#1085#1080#1103' '#1079#1072#1076#1072#1085#1080#1103
     Alignment = taCenter
+    Anchors = [akLeft, akBottom]
     Caption = 'Stopwatch'
     Color = clYellow
     Font.Charset = DEFAULT_CHARSET
@@ -1388,6 +1389,7 @@
     Font.Style = []
     ParentColor = False
     ParentFont = False
+    Visible = False
   end
   object Ravno5: TImage
     Tag = 5
@@ -1886,11 +1888,13 @@
     Height = 41
     Anchors = [akLeft, akBottom]
     Caption = 'Panel10'
+    Color = clGradientActiveCaption
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clFuchsia
     Font.Height = -17
     Font.Name = 'Verdana'
     Font.Style = [fsBold, fsItalic]
+    ParentBackground = False
     ParentFont = False
     TabOrder = 16
   end

@@ -423,14 +423,7 @@ ResultKoef [1] := 1;
 ResultKoef [2] := 8;
 ResultKoef [3] := 8192;
 ResultKoef [4] := 8388608;
-for i := 1 to 5 do
-  for k := 1 to 2 do 
-    Memo1.Lines.Add(IntToStr(i)+IntToStr(k)+' - ' + IntToStr(PanelL[i,k].Top));
- {for i := 1 to 5 do
-    Begin
-      if PanelL[i,1].Top = PanelL[i,2].Top then Mark := Mark +1;
-    End;}
-{TopFirst := PanelL[1,1].Top+6; Shag := 117;  }
+
 q:=1; w:=1;
 While (q < 6) and (w < 3) do
 Begin
@@ -492,7 +485,7 @@ Var
   Expr: TExprClass;
   Bit: String[7];
   ImPer: TImage;
-
+  LimitedTop,LimitedLeft: Word;
 begin
 N2.Enabled := False;
 Sopos.Enabled := False;
@@ -507,11 +500,11 @@ for i :=1 to 5 do
             PanelL[i,k].Cursor := crHandPoint;
           End;
 FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
-    ColorFont [0] := 0;
-    ColorFont [1] := RGB(0,0,255);
-    ColorFont [2] := 255;
-    ColorFont [3] := 65280;
-    ColorFont [4] := 16711935;
+    ColorFont [0] := $4B0082;
+    ColorFont [1] := $800000;
+    ColorFont [2] := $ff0000;
+    ColorFont [3] := $FF00FF;
+    ColorFont [4] := 0;
     Measure [1] := ' бит';
     Measure [2] := ' байт';
     Measure [3] := ' Кбайт';
@@ -526,11 +519,14 @@ FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
     TimeNow := Time;
     Timer1.Enabled := True;
     StopWatch.Visible := True;
+
+    LimitedTop := Razm.ClientHeight - 100;
+    LimitedLeft := Razm.ClientWidth - 930;
    for i :=1 to 5 do
     for k := 1 to 2 do
       Begin
-          PanelL [i,k].Top := Random (600) + 25;
-          PanelL [i,k].Left := Random (450) + 200;
+          PanelL [i,k].Top := Random (LimitedTop) + 25;
+          PanelL [i,k].Left := Random (LimitedLeft) + ImageLevel.Width + ImageLevel.Left + 10;
           PanelL [i,k].Visible := True;
       End;
 
@@ -683,6 +679,11 @@ FillChar(NumberOnImage,sizeof(NumberOnImage),0);  //обнуление массива
         Font.Size := FontSize;
         Font.Style:=[fsBold];
         Color := NumberOnImage[i,k].MyColor;
+        with Expr.Canvas do
+           begin
+              brush.Color:=RGB(189,208,156);
+              rectangle(0,0,143,56);
+           end;
         Draw(75,32,ehCenter,evCenter);
         Free;
        End;
